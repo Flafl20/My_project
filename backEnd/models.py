@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Enum, DateTime
-from datetime import datetime
+from datetime import datetime, date
 from sqlalchemy.orm import relationship
 from database import Base, engine
 from schemas import RoleEnum
@@ -17,6 +17,9 @@ class User(Base):
     role = Column(Enum(RoleEnum), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    patient_profile = relationship("Patient", back_populates="user", uselist=False)
+    user_role = relationship("Role", back_populates="user", uselist=False)
+
 
 class Role(Base):
     __tablename__ = "roles"
@@ -24,7 +27,26 @@ class Role(Base):
     id = Column(Integer, primary_key=True, index=True)
     roleName = Column(Enum(RoleEnum), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", backref="user_role", uselist=False)
+    user = relationship("User", back_populates="user_role", uselist=False)
+
+
+class Patient(Base):
+    __tablename__ = "patients"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
+    date_of_birth = Column(DateTime, nullable=False)
+    phone_number = Column(String, nullable=False)
+    address = Column(String, nullable=False)
+    blood_type = Column(String, nullable=False)
+    allergies = Column(String, nullable=True)
+    emergency_contact_name = Column(String, nullable=False)
+    emergency_contact_number = Column(String, nullable=False)
+    medical_history = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="patient_profile", uselist=False)
 
 
 Base.metadata.create_all(bind=engine)
