@@ -105,3 +105,85 @@ class Patient(PatientBase):
 
     class Config:
         from_attributes = True
+
+
+class DoctorBase(BaseModel):
+    specialty: str
+    lincense_number: str
+    phone_number: str
+
+
+class DoctorCreate(DoctorBase):
+    pass
+
+
+class DoctorUpdate(BaseModel):
+    specialty: str | None = None
+    phone_number: str | None = None
+
+
+class Doctor(DoctorBase):
+    id: int
+    user_id: int
+    full_name: str | None = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class PrescriptionBase(BaseModel):
+    medication_name: str
+    dosage: str
+    frequency: str
+    duration: str
+    instructions: str | None = None
+    max_refills: int = 0
+    expiry_date: date | None = None
+
+
+class PrescriptionCreate(PrescriptionBase):
+    patient_id: int
+
+
+class prescriptionUpdate(BaseModel):
+    medication_name: str | None = None
+    dosage: str | None = None
+    frequency: str | None = None
+    duration: str | None = None
+    instructions: str | None = None
+    max_refills: int | None = None
+    expiry_date: date | None = None
+
+
+class Prescription(PrescriptionBase):
+    id: int
+    patient_id: int
+    doctor_id: int
+    is_filled: bool
+    times_filled: int
+    prescribed_date: datetime
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class PrescriptionFillCreate(BaseModel):
+    quantity_dispensed: str
+    notes: str | None = None
+
+
+class PrescriptionFill(BaseModel):
+    id: int
+    prescription_id: int
+    pharmacist_id: int
+    filled_date: datetime
+    quantity_dispensed: str
+    notes: str | None = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

@@ -53,7 +53,7 @@ async def create_patient_profile(
         blood_type=patient_data.blood_type,
         allergies=patient_data.allergies,
         emergency_contact_name=patient_data.emergency_contact_name,
-        emergency_contact_phone=patient_data.emergency_contact_number,
+        emergency_contact_number=patient_data.emergency_contact_number,
         medical_history=patient_data.medical_history,
     )
     db.add(db_patient)
@@ -66,7 +66,7 @@ async def create_patient_profile(
 @router.get("/profile/info", response_model=schemas.Patient)
 async def get_patient_profile(
     current_user: models.User = Depends(
-        role_required([schemas.RoleEnum.PATIENT, schemas.RoleEnum.DOCTOR])
+        role_required(schemas.RoleEnum.PATIENT, schemas.RoleEnum.DOCTOR)
     ),
     db: Session = Depends(get_db),
 ):
