@@ -109,7 +109,7 @@ class Patient(PatientBase):
 
 class DoctorBase(BaseModel):
     specialty: str
-    lincense_number: str
+    license_number: str
     phone_number: str
 
 

@@ -10,10 +10,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-with engine.connect() as conn:
-    conn.execute(text("DROP TABLE IF EXISTS prescription_fills CASCADE"))
-    conn.execute(text("DROP TABLE IF EXISTS prescription CASCADE"))
-    conn.execute(text("DROP TABLE IF EXISTS doctors CASCADE"))
-    conn.execute(text("DROP TABLE IF EXISTS patients CASCADE"))
-    conn.commit()
-    print("Dropped Tables: presciption_fills, presipton, doctors, paitents")
+# with engine.connect() as conn:
+#     conn.execute(text("DROP TABLE IF EXISTS prescription_fills CASCADE"))
+#     conn.execute(text("DROP TABLE IF EXISTS prescription CASCADE"))
+#     conn.execute(text("DROP TABLE IF EXISTS doctors CASCADE"))
+#     conn.execute(text("DROP TABLE IF EXISTS patients CASCADE"))
+#     conn.execute(text("DROP TABLE IF EXISTS roles CASCADE"))
+#     conn.execute(text("DROP TABLE IF EXISTS users CASCADE"))
+#     conn.commit()
+#     print("Dropped Tables: presciption_fills, presipton, doctors, paitents")

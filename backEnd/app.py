@@ -5,12 +5,14 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
+from sqlalchemy.sql.functions import user
+
 from models import User, Role
 from database import SessionLocal, engine
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import schemas
-from routes import patient, doctor
+from routes import patient, doctor, pharmacist
 
 app = FastAPI()
 
@@ -152,3 +154,4 @@ async def verify_auth_token(token_data: dict = Depends(verify_token)):
 
 app.include_router(patient.router)
 app.include_router(doctor.router)
+app.include_router(pharmacist.router)

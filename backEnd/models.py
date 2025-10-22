@@ -75,7 +75,7 @@ class Doctor(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
     specialty = Column(String, nullable=False)
-    license_number = Column(String, nullable=False)
+    license_number= Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
@@ -90,7 +90,7 @@ class Prescription(Base):
     __tablename__ = "prescriptions"
 
     id = Column(Integer, primary_key=True, index=True)
-    Patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
+    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
     doctor_id = Column(Integer, ForeignKey("doctors.id"), nullable=False)
 
     medication_name = Column(String, nullable=False)
@@ -119,9 +119,6 @@ class Prescription(Base):
 
 class PrescriptionFill(Base):
     __tablename__ = "prescription_fills"
-
-    id = Column(Integer, primary_key=True, index=True)
-    prescription_id = __tablename__ = "prescription_fills"
 
     id = Column(Integer, primary_key=True, index=True)
     prescription_id = Column(Integer, ForeignKey("prescriptions.id"), nullable=False)

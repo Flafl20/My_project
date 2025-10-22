@@ -43,7 +43,9 @@ def get_current_user(
 
 def role_required(*allowed_roles: schemas.RoleEnum) -> callable:
     async def role_checker(current_user: User = Depends(get_current_user)):
-        if current_user.role not in allowed_roles:
+        user_role = current_user.role if isinstance(current_user.role, schemas.RoleEnum) else schemas.RoleEnum(current_user.role)
+
+        if user_role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Operation not permitted for this role",

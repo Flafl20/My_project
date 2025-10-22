@@ -12,7 +12,7 @@ async def check_doctor_profile_status(
     current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)),
     db: Session = Depends(get_db),
 ):
-    doctor_profile = db.query(Doctor).filter(Doctor.user_id == current_user.id)
+    doctor_profile = db.query(Doctor).filter(Doctor.user_id == current_user.id).first()
 
     return {
         "has_profile": doctor_profile is not None,
@@ -30,7 +30,7 @@ async def create_doctor_profile(
 ):
     existing_license = (
         db.query(Doctor)
-        .filter(Doctor.license_number == doctor_data.lincense_number)
+        .filter(Doctor.license_number == doctor_data.license_number)
         .first()
     )
     if existing_license:
@@ -41,7 +41,7 @@ async def create_doctor_profile(
     db_doctor = Doctor(
         user_id=current_user.id,
         specialty=doctor_data.specialty,
-        license_number=doctor_data.lincense_number,
+        license_number=doctor_data.license_number,
         phone_number=doctor_data.phone_number,
     )
 
@@ -57,7 +57,7 @@ async def get_doctor_profile(
     current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)),
     db: Session = Depends(get_db),
 ):
-    doctor_profile = db.query(Doctor).filter(Doctor.user_id == current_user.id)
+    doctor_profile = db.query(Doctor).filter(Doctor.user_id == current_user.id).first()
 
     if not doctor_profile:
         raise HTTPException(
@@ -74,10 +74,10 @@ async def get_doctor_profile(
 @router.put("/profile", response_model=schemas.Doctor)
 async def update_doctor_profile(
     doctor_data: schemas.DoctorUpdate,
-    current_user: User = Depends(schemas.RoleEnum.DOCTOR),
+    current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)), 
     db: Session = Depends(get_db),
 ):
-    doctor_profile = db.query(Doctor).filter(Doctor.user_id == current_user.id)
+    doctor_profile = db.query(Doctor).filter(Doctor.user_id == current_user.id).first()
     if not doctor_profile:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -122,6 +122,7 @@ async def create_prescriptions(
         dosage=prescription_data.dosage,
         frequency=prescription_data.frequency,
         instructions=prescription_data.instructions,
+        duration=prescription_data.duration,
         max_refills=prescription_data.max_refills,
         expiry_date=prescription_data.expiry_date,
     )
@@ -134,7 +135,7 @@ async def create_prescriptions(
 
 @router.get("/prescriptions/{prescription_id}", response_model=schemas.Prescription)
 async def get_prescription(
-    prescription_id=int,
+    prescription_id: int,
     current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)),
     db: Session = Depends(get_db),
 ):
