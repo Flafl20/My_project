@@ -25,7 +25,7 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=False, index=True)
     role = Column(Enum(RoleEnum), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow())
 
     patient_profile = relationship(
         "Patient", back_populates="user", uselist=False, lazy="joined"
@@ -60,13 +60,14 @@ class Patient(Base):
     emergency_contact_name = Column(String, nullable=False)
     emergency_contact_number = Column(String, nullable=False)
     medical_history = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow())
+    updated_at = Column(DateTime, default=datetime.utcnow())
 
     user = relationship("User", back_populates="patient_profile", uselist=False)
     prescriptions = relationship(
         "Prescription", back_populates="patient", lazy="dynamic"
     )
+    lab_tests = relationship("labTest", back_populates="patient", lazy="dynamic")
 
 
 class Doctor(Base):
@@ -77,8 +78,8 @@ class Doctor(Base):
     specialty = Column(String, nullable=False)
     license_number= Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow())
+    updated_at = Column(DateTime, default=datetime.utcnow())
 
     user = relationship("User", back_populates="doctor_profile")
     prescriptions = relationship(
@@ -103,11 +104,11 @@ class Prescription(Base):
     times_filled = Column(Integer, default=0)
     max_refills = Column(Integer, default=0)
 
-    prescribed_date = Column(DateTime, default=datetime.utcnow)
+    prescribed_date = Column(DateTime, default=datetime.utcnow())
     expiry_date = Column(Date, nullable=True)
 
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow())
+    updated_at = Column(DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
 
     # Relationships
     patient = relationship("Patient", back_populates="prescriptions")
@@ -124,11 +125,11 @@ class PrescriptionFill(Base):
     prescription_id = Column(Integer, ForeignKey("prescriptions.id"), nullable=False)
     pharmacist_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
-    filled_date = Column(DateTime, default=datetime.utcnow)
+    filled_date = Column(DateTime, default=datetime.utcnow())
     quantity_dispensed = Column(String, nullable=False)
     notes = Column(Text, nullable=True)
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow())
 
     # Relationships
     prescription = relationship("Prescription", back_populates="fills")
@@ -136,3 +137,22 @@ class PrescriptionFill(Base):
 
 
 Base.metadata.create_all(bind=engine)
+
+class LabTest(Base):
+    __tablename__ = "lab_tests"
+    id = Column(Integer, primary_key=True, index=True)
+    patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
+    bio_analyst_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    test_name = Column(String, nullable=False)
+    test_date = Column(DateTime, default=datetime.utcnow() ,nullable=False)
+
+    file_path = Column(String, nullable=False)
+    original_filename = Column(String, nullable=False)
+    content_type = Column(String, nullable=False)
+
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow())
+
+    patient = relationship("Patient", back_populates="lab_tests")
+    bio_analyst = relationship("User", foreign_keys=[bio_analyst_id])

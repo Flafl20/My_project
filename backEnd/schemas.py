@@ -187,3 +187,23 @@ class PrescriptionFill(BaseModel):
 
     class Config:
         from_attributes = True
+
+class LabTestBase(BaseModel):
+    test_name: str
+    notes: str | None = None
+
+class LabTestCreate(LabTestBase):
+    patient_id: int
+
+class LabTest(LabTestBase):
+    id: int
+    patient_id: int
+    bio_analyst_id: int
+    test_date: datetime
+    created_at: datetime
+
+    original_filename: str
+    content_type: str
+
+    class Config:
+        from_attributes = True

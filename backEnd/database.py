@@ -11,6 +11,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # with engine.connect() as conn:
+#     conn.execute(text("DROP TABLE IF EXISTS lab_tests CASCADE"))
 #     conn.execute(text("DROP TABLE IF EXISTS prescription_fills CASCADE"))
 #     conn.execute(text("DROP TABLE IF EXISTS prescription CASCADE"))
 #     conn.execute(text("DROP TABLE IF EXISTS doctors CASCADE"))

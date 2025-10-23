@@ -12,7 +12,7 @@ from database import SessionLocal, engine
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import schemas
-from routes import patient, doctor, pharmacist
+from routes import patient, doctor, pharmacist,bioanalyst
 
 app = FastAPI()
 
@@ -155,3 +155,4 @@ async def verify_auth_token(token_data: dict = Depends(verify_token)):
 app.include_router(patient.router)
 app.include_router(doctor.router)
 app.include_router(pharmacist.router)
+app.include_router(bioanalyst.router)
