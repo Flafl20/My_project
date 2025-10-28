@@ -1,15 +1,9 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  Children,
-} from "react"
-import { verifyToken } from "../services/api"
+import React, { createContext, useState, useEffect, useContext } from "react"
+import { loginUser, verifyToken } from "../services/api"
 
 const AuthContext = createContext()
 
-export const AuthProvider = ({ Children }) => {
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"))
   const [authRole, setAuthRole] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -34,10 +28,20 @@ export const AuthProvider = ({ Children }) => {
     checkAuth()
   }, [token])
 
-  const login = (newToken, role) => {
-    localStorage.setItem("token", newToken)
-    setToken(newToken)
-    setAuthRole(role)
+  const login = async (email, password) => {
+    try {
+      const data = await loginUser(email, password)
+      const newToken = data.access_token
+      localStorage.setItem("token", newToken)
+      setToken(newToken)
+
+      const verifyData = await verifyToken()
+      setAuthRole(verifyData.role)
+
+      return verifyData
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const logout = () => {
@@ -54,13 +58,14 @@ export const AuthProvider = ({ Children }) => {
     logout,
     isAuthenticated: !!token,
   }
-  return (
-    <AuthContext.Provider value={value}>
-      {isLoading && Children}
-    </AuthContext.Provider>
-  )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => {
-  return useContext(AuthContext)
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider")
+  }
+  return context
 }

@@ -1,5 +1,5 @@
 import axios from "axios"
-const API_BASE_URL = "http://localhost:8000"
+const API_BASE_URL = "http;//localhost:8000"
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -18,23 +18,20 @@ api.interceptors.request.use(
   }
 )
 
-// -- Auth Functions --
+// --- Auth Functions --- //
 
 export const loginUser = async (email, password) => {
   const params = new URLSearchParams()
-
   params.append("username", email)
   params.append("password", password)
 
-  const response = await api.post("/token", params, {
+  const respone = await api.post("/token", params, {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   })
-  return response.data
+  return respone.data
 }
 
-// registers a new user //
-
-export const registerUser = async (
+export const regusterUser = async (
   firstName,
   lastName,
   email,
@@ -52,39 +49,50 @@ export const registerUser = async (
   return response.data
 }
 
-// verifies ther current token //
-
 export const verifyToken = async () => {
   const response = await api.get("/verify-token")
   return response.data
 }
 
-// DOCTOR Endpoints //
+// --- PATIENT Endpoints --- //
+
+export const checkPatientProfileStatus = () =>
+  api.get("/patient/profile/status")
+export const getPatientProfile = () => api.get("/patient/profile/info")
+export const createPatientProfile = (data) => api.post("/patient/profile", data)
+export const updatePatientProfile = (data) => api.put("/patient/profile", data)
+
+// --- DOCTOR Endpoints --- //
 
 export const checkDoctorProfileStatus = () => api.get("/doctor/profile/status")
 export const getDoctorProfile = () => api.get("/doctor/profile")
 export const createDoctorProfile = (data) => api.post("/doctor/profile", data)
 export const updateDoctorProfile = (data) => api.put("/doctor/profile", data)
 export const getAllPatients = () => api.get("/doctor/patients")
-export const createPrescription = (data) =>
+export const getPatientById = (id) => api.get(`/doctor/patients/${id}`)
+export const createPrescrpiton = (data) =>
   api.post("/doctor/prescriptions", data)
+export const getPrescription = (id) => api.get(`doctor/prescriptions/${id}`)
 
-// Pharmacist Functions
+// --- PHARMACIST Endpoints --- //
 
 export const getAllPrescriptions = () => api.get("/pharmacist/prescriptions")
-export const getPrescriptionById = (id) =>
+export const getPrescriptionsById = (id) =>
   api.get(`/pharmacist/prescriptions/${id}`)
 export const fillPrescription = (id, data) =>
   api.post(`/pharmacist/prescriptions/${id}/fill`, data)
 
-// BIo-Analyst Endpoints //
+// --- BIO-ANALYST Endpoints --- //
 
-export const getLabTests = () => api.get("/bio-analyst/tests")
-export const uploadLabTest = (formData) => {
-  return api.post("/bio-analyst/tests", formData, {
+export const createLabTest = (FormData) => {
+  return api.post("/bio-analyst/test", FormData, {
     headers: { "Content-Type": "multipart/form-data" },
   })
 }
+
+export const getPatientLabTests = (patientId) =>
+  api.get(`/bio-analyst/patients/${patientId}/tests`)
+export const getLabTest = (id) => api.get(`/bio-analyst/test/${id}`)
 export const getLabTestFile = (id) =>
   api.get(`/bio-analyst/tests/${id}/file`, { responseType: "blob" })
 
