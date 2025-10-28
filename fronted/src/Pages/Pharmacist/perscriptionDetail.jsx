@@ -122,7 +122,8 @@ const PrescriptionDetails = () => {
                 Patient Name
               </dt>
               <dd className="mt-1 text-sm font-semibold text-gray-900">
-                {prescription.patient_name || `ID: ${prescription.patient_id}`}
+                {prescription.patient_name ||
+                  `ID: ${prescription.patient_name}`}
               </dd>
             </div>
             <div>

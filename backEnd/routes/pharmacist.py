@@ -12,8 +12,19 @@ async def get_prescriptions(
         db: Session = Depends(get_db),
         current_user: schemas.User = Depends(role_required(schemas.RoleEnum.PHARMACIST)),
 ):
-    prescriptions = db.query(Prescription).all()
-    return prescriptions
+    prescriptions_query = db.query(Prescription).all()
+    results = []
+
+    for prescription in prescriptions_query:
+        patient_name = None
+        if prescription.patient and prescription.patient.user:
+            patient_name = f"{prescription.patient.user.first_name} {prescription.patient.user.last_name}"
+
+        prescription_dict = prescription.__dict__
+        prescription_dict['patient_name'] = patient_name
+        results.append(prescription_dict)
+
+    return results
 
 @router.get("/prescriptions/{prescription_id}", response_model=schemas.Prescription)
 async def get_prescription_by_id(

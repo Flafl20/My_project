@@ -167,13 +167,14 @@ async def get_all_patients(
     current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)),
     db: Session = Depends(get_db),
 ):
-    patient = db.query(Patient).join(User, Patient.user_id == User.id).all()
+    patient_query = db.query(Patient).join(User, Patient.user_id == User.id).all()
     patient_list = []
-    for patient in patient:
+    for patient_obj in patient_query:
         patient_dict = {
-            **patient.__dict__,
-            "patient_name": f"{patient.user.first_name} {patient.user.last_name}",
+            **patient_obj.__dict__,
+            "patient_name": f"{patient_obj.user.first_name} {patient_obj.user.last_name}",
         }
+        patient_list.append(patient_dict)
     return patient_list
 
 
