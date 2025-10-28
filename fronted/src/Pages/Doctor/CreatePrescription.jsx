@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import DashboardLayout from "../../components/DashboardLayout"
-import { getAllPatients, createPrescription } from "../../services/api"
+import { getAllPatients, createPrescrpiton } from "../../services/api"
 
 const CreatePrescription = () => {
   const [patients, setPatients] = useState([])
@@ -54,7 +54,7 @@ const CreatePrescription = () => {
     setSubmitting(true)
 
     try {
-      await createPrescription(formData)
+      await createPrescrpiton(formData)
       setSuccess("Prescription created successfully!")
       setTimeout(() => {
         navigate("/doctor/patients")

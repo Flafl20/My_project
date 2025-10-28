@@ -11,7 +11,7 @@ const LoginPage = () => {
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preverntDefault()
+    // e.preventDefault()
     setError("")
     setLoading(true)
 

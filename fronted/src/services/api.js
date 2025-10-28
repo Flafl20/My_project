@@ -1,5 +1,5 @@
 import axios from "axios"
-const API_BASE_URL = "http;//localhost:8000"
+const API_BASE_URL = "http://localhost:8000"
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -77,7 +77,7 @@ export const getPrescription = (id) => api.get(`doctor/prescriptions/${id}`)
 // --- PHARMACIST Endpoints --- //
 
 export const getAllPrescriptions = () => api.get("/pharmacist/prescriptions")
-export const getPrescriptionsById = (id) =>
+export const getPrescriptionById = (id) =>
   api.get(`/pharmacist/prescriptions/${id}`)
 export const fillPrescription = (id, data) =>
   api.post(`/pharmacist/prescriptions/${id}/fill`, data)
