@@ -35,8 +35,14 @@ async def get_prescription_by_id(
     prescription = db.query(Prescription).filter(Prescription.id == prescription_id).first()
     if not prescription:
         raise HTTPException(status_code=404, detail="Prescription not found")
-    return prescription
 
+    patient_name = None
+    if prescription.patient and prescription.patient.user:
+        patient_name =f"{prescription.patient.user.first_name} {prescription.patient.user.last_name}"
+
+    prescription_dict = prescription.__dict__
+    prescription_dict['patient_name'] = patient_name
+    return prescription_dict
 @router.post("/prescriptions/{prescription_id}/fill", response_model=schemas.Prescription)
 async def fill_prescription(
         prescription_id: int,

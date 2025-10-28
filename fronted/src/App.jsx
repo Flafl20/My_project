@@ -5,6 +5,7 @@ import { useAuth } from "./context/AuthContext"
 // Auth pages
 import LoginPage from "./Pages/LoginPage"
 import RegisterPage from "./Pages/RgisterPage"
+import LandingPage from "./Pages/LandinPage"
 
 // Protected Route compontent
 import ProtectedRoute from "./components/ProtectedRoute"
@@ -47,19 +48,34 @@ function App() {
 
   return (
     <Routes>
+      {/* Public Landing Page */}
+      <Route path="/home" element={<LandingPage />} />
+
       {/* Public Routes */}
       <Route
         path="/login"
-        element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />}
+        element={
+          !isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" />
+        }
       />
       <Route
         path="/register"
-        element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/" />}
+        element={
+          !isAuthenticated ? <RegisterPage /> : <Navigate to="/dashboard" />
+        }
       />
 
-      {/* Root route - redirect based on role */}
+      {/* Root route - redirect to landing page or dashboard based on auth */}
       <Route
         path="/"
+        element={
+          isAuthenticated ? <Navigate to="/dashboard" /> : <LandingPage />
+        }
+      />
+
+      {/* Dashboard route - redirect based on role */}
+      <Route
+        path="/dashboard"
         element={
           isAuthenticated ? (
             authRole === "PATIENT" ? (
