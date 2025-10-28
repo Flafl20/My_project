@@ -29,7 +29,7 @@ async def get_prescription_by_id(
 @router.post("/prescriptions/{prescription_id}/fill", response_model=schemas.Prescription)
 async def fill_prescription(
         prescription_id: int,
-        fill_data: schemas.PrescriptionFill,
+        fill_data: schemas.PrescriptionFillCreate,
         db: Session = Depends(get_db),
         current_user: schemas.User = Depends(role_required(schemas.RoleEnum.PHARMACIST)),
 ):

@@ -32,11 +32,11 @@ const PrescriptionList = () => {
       (filterStatus === "filled" && prescription.is_filled) ||
       (filterStatus === "unfilled" && !prescription.is_filled)
 
+    const searchLower = searchTerm.toLowerCase()
     const matchesSearch =
-      prescription.medication_name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      prescription.patient_id.toString().includes(searchTerm)
+      prescription.medication_name.toLowerCase().includes(searchLower) ||
+      prescription.patient_name?.toLowerCase().includes(searchLower) ||
+      prescription.patient_id.toString().includes(searchLower)
 
     return matchesStatus && matchesSearch
   })
@@ -59,7 +59,7 @@ const PrescriptionList = () => {
         <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2">
           <input
             type="text"
-            placeholder="Search by medication or patient ID..."
+            placeholder="Search by medication, patient name, or patient ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="px-4 py-2 border rounded-md"
@@ -97,10 +97,11 @@ const PrescriptionList = () => {
                           <div className="grid grid-cols-2 gap-4 mt-2 md:grid-cols-4">
                             <div>
                               <p className="text-sm text-gray-500">
-                                Patient ID
+                                Patient Name
                               </p>
-                              <p className="text-sm text-gray-900">
-                                {prescription.patient_id}
+                              <p className="text-sm font-medium text-gray-900">
+                                {prescription.patient_name ||
+                                  `ID: ${prescription.patient_id}`}
                               </p>
                             </div>
                             <div>

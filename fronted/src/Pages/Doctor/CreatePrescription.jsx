@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import DashboardLayout from "../../components/DashboardLayout"
 import { getAllPatients, createPrescrpiton } from "../../services/api"
 
@@ -10,9 +10,10 @@ const CreatePrescription = () => {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [formData, setFormData] = useState({
-    patient_id: "",
+    patient_id: searchParams.get("patientId") || "",
     medication_name: "",
     dosage: "",
     frequency: "",
@@ -108,7 +109,8 @@ const CreatePrescription = () => {
               <option value="">Select a patient</option>
               {patients.map((patient) => (
                 <option key={patient.id} value={patient.id}>
-                  Patient ID: {patient.id} - Phone: {patient.phone_number}
+                  {patient.patient_name} (ID: {patient.id}) -{" "}
+                  {patient.phone_number}
                 </option>
               ))}
             </select>

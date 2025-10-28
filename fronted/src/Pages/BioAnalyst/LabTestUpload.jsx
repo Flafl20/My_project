@@ -127,7 +127,8 @@ const LabTestUpload = () => {
               <option value="">Select a patient</option>
               {patients.map((patient) => (
                 <option key={patient.id} value={patient.id}>
-                  Patient ID: {patient.id} - Phone: {patient.phone_number}
+                  {patient.patient_name} (ID: {patient.id}) -{" "}
+                  {patient.phone_number}
                 </option>
               ))}
             </select>

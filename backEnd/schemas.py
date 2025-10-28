@@ -1,7 +1,9 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime, date
+
+# from models import Prescription
 
 
 class RoleEnum(Enum):
@@ -102,6 +104,8 @@ class Patient(PatientBase):
     user_id: int
     created_at: datetime
     updated_at: datetime
+    patient_name: str | None = None
+    prescriptions: List["Prescription"] = []
 
     class Config:
         from_attributes = True
@@ -139,7 +143,7 @@ class PrescriptionBase(BaseModel):
     frequency: str
     duration: str
     instructions: str | None = None
-    max_refills: int = 0
+    max_refills: int = -1
     expiry_date: date | None = None
 
 
@@ -166,6 +170,7 @@ class Prescription(PrescriptionBase):
     prescribed_date: datetime
     created_at: datetime
     updated_at: datetime
+    patient_name: str | None = None
 
     class Config:
         from_attributes = True

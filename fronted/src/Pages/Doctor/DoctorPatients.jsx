@@ -26,10 +26,15 @@ const DoctorPatients = () => {
   }
 
   const filteredPatients = patients.filter((patient) => {
-    const fullName = `${patient.user?.first_name || ""} ${
-      patient.user?.last_name || ""
-    }`.toLowerCase()
-    return fullName.includes(searchTerm.toLowerCase())
+    const patientName = patient.patient_name?.toLowerCase() || ""
+    const phoneNumber = patient.phone_number?.toLowerCase() || ""
+    const searchLower = searchTerm.toLowerCase()
+
+    return (
+      patientName.includes(searchLower) ||
+      phoneNumber.includes(searchLower) ||
+      patient.id.toString().includes(searchLower)
+    )
   })
 
   if (loading) {
@@ -58,7 +63,7 @@ const DoctorPatients = () => {
         <div className="mb-6">
           <input
             type="text"
-            placeholder="Search patients by name..."
+            placeholder="Search patients by name, phone, or ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full px-4 py-2 border rounded-md"
@@ -82,9 +87,18 @@ const DoctorPatients = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <p className="text-lg font-medium text-blue-600">
-                            Patient ID: {patient.id}
+                            {patient.patient_name ||
+                              `Patient ID: ${patient.id}`}
                           </p>
-                          <div className="grid grid-cols-2 gap-4 mt-2">
+                          <div className="grid grid-cols-2 gap-4 mt-2 md:grid-cols-4">
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                Patient ID
+                              </p>
+                              <p className="text-sm text-gray-900">
+                                {patient.id}
+                              </p>
+                            </div>
                             <div>
                               <p className="text-sm text-gray-500">Phone</p>
                               <p className="text-sm text-gray-900">
@@ -107,12 +121,16 @@ const DoctorPatients = () => {
                                 {patient.date_of_birth}
                               </p>
                             </div>
-                            <div>
-                              <p className="text-sm text-gray-500">Allergies</p>
-                              <p className="text-sm text-gray-900">
-                                {patient.allergies || "None"}
-                              </p>
-                            </div>
+                            {patient.allergies && (
+                              <div className="md:col-span-2">
+                                <p className="text-sm text-gray-500">
+                                  Allergies
+                                </p>
+                                <p className="text-sm text-red-600">
+                                  {patient.allergies}
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div>

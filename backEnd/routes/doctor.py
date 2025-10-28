@@ -167,8 +167,14 @@ async def get_all_patients(
     current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)),
     db: Session = Depends(get_db),
 ):
-    patient = db.query(Patient).all()
-    return patient
+    patient = db.query(Patient).join(User, Patient.user_id == User.id).all()
+    patient_list = []
+    for patient in patient:
+        patient_dict = {
+            **patient.__dict__,
+            "patient_name": f"{patient.user.first_name} {patient.user.last_name}",
+        }
+    return patient_list
 
 
 @router.get("/patients/{patient_id}", response_model=schemas.Patient)
@@ -182,4 +188,7 @@ async def get_patient_by_id(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="patient not found"
         )
-    return patient
+    return {
+        **patient.__dict__,
+        "patient_name": f"{patient.user.first_name} {patient.user.last_name}",
+    }

@@ -118,9 +118,11 @@ const PrescriptionDetails = () => {
               <dd className="mt-1 text-sm text-gray-900">{prescription.id}</dd>
             </div>
             <div>
-              <dt className="text-sm font-medium text-gray-500">Patient ID</dt>
-              <dd className="mt-1 text-sm text-gray-900">
-                {prescription.patient_id}
+              <dt className="text-sm font-medium text-gray-500">
+                Patient Name
+              </dt>
+              <dd className="mt-1 text-sm font-semibold text-gray-900">
+                {prescription.patient_name || `ID: ${prescription.patient_id}`}
               </dd>
             </div>
             <div>
