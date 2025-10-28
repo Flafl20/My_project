@@ -31,7 +31,7 @@ export const loginUser = async (email, password) => {
   return respone.data
 }
 
-export const regusterUser = async (
+export const registerUser = async (
   firstName,
   lastName,
   email,
