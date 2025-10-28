@@ -67,7 +67,7 @@ class Patient(Base):
     prescriptions = relationship(
         "Prescription", back_populates="patient", lazy="dynamic"
     )
-    lab_tests = relationship("labTest", back_populates="patient", lazy="dynamic")
+    lab_tests = relationship("LabTest", back_populates="patient", lazy="dynamic")
 
 
 class Doctor(Base):

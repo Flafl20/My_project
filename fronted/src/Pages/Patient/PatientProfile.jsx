@@ -51,6 +51,9 @@ const PatientProfile = () => {
             profileRes.data.emergency_contact_number || "",
           medical_history: profileRes.data.medical_history || "",
         })
+        setEditing(false)
+      } else {
+        setEditing(true)
       }
     } catch (err) {
       console.error("Failed to load profile", err)
