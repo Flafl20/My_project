@@ -84,7 +84,7 @@ function App() {
               <Navigate to="/doctor" />
             ) : authRole === "PHARMACIST" ? (
               <Navigate to="/pharmacist" />
-            ) : authRole === "BI0_ANALYST" ? (
+            ) : authRole === "BIO_ANALYST" ? (
               <Navigate to="/bio-analyst" />
             ) : (
               <Navigate to="/login" />
@@ -132,7 +132,7 @@ function App() {
       </Route>
 
       {/* Bio Analyst Routes */}
-      <Route element={<ProtectedRoute allowRole="BI0_ANALYST" />}>
+      <Route element={<ProtectedRoute allowRole="BIO_ANALYST" />}>
         <Route path="/bio-analyst" element={<BioAnalystDashboard />} />
         <Route path="/bio-analyst/upload" element={<LabTestUpload />} />
         <Route path="/bio-analyst/tests" element={<LabTestList />} />

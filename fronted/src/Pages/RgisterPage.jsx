@@ -121,7 +121,7 @@ const RegisterPage = () => {
               <option value="PATIENT">Patient</option>
               <option value="DOCTOR">Doctor</option>
               <option value="PHARMACIST">Pharmacist</option>
-              <option value="BI0_ANALYST">Bio Analyst</option>
+              <option value="BIO_ANALYST">Bio Analyst</option>
             </select>
           </div>
 

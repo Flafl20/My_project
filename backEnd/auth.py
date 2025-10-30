@@ -43,7 +43,10 @@ def get_current_user(
 
 def role_required(*allowed_roles: schemas.RoleEnum) -> callable:
     async def role_checker(current_user: User = Depends(get_current_user)):
-        user_role = current_user.role if isinstance(current_user.role, schemas.RoleEnum) else schemas.RoleEnum(current_user.role)
+        if isinstance(current_user.role, str):
+            user_role = schemas.RoleEnum(current_user.role)
+        else:
+            user_role = current_user.role
 
         if user_role not in allowed_roles:
             raise HTTPException(

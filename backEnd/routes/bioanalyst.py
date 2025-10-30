@@ -11,7 +11,7 @@ import shutil
 
 router = APIRouter(prefix="/bio-analyst", tags=["bio-analyst"])
 
-LAB_RESULTS_DIR = "~/Documents/lab-results"
+LAB_RESULTS_DIR = os.path.expanduser("~/Documents/lab-results")
 
 os.makedirs(LAB_RESULTS_DIR, exist_ok=True)
 
@@ -21,7 +21,7 @@ async def create_lab_test(
         test_name: str = Form(...),
         notes: str | None = Form(...),
         file: UploadFile = File(...),
-        current_user: schemas.User = Depends(role_required(schemas.RoleEnum.BI0_ANALYST)),
+        current_user: schemas.User = Depends(role_required(schemas.RoleEnum.BIO_ANALYST)),
         db: Session = Depends(get_db),
 ):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
@@ -68,7 +68,7 @@ async def create_lab_test(
 async def get_lab_test_for_patients(
         patient_id: int ,
         db: Session = Depends(get_db),
-        current_user: User = Depends(role_required(schemas.RoleEnum.BI0_ANALYST)),
+        current_user: User = Depends(role_required(schemas.RoleEnum.BIO_ANALYST)),
 ):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
@@ -80,7 +80,7 @@ async def get_lab_test_for_patients(
 async def get_lab_test(
         test_id: int,
         db: Session = Depends(get_db),
-        cureent_user : User = Depends(role_required(schemas.RoleEnum.BI0_ANALYST)),
+        cureent_user : User = Depends(role_required(schemas.RoleEnum.BIO_ANALYST)),
 ):
     test = db.query(LabTest).filter(LabTest.id == test_id).first()
     if not test:
@@ -90,7 +90,7 @@ async def get_lab_test(
 @router.get("/tests/{test_id}/file")
 async def get_lab_test_file(
         test_id: int,
-        current_user: User = Depends(role_required(schemas.RoleEnum.BI0_ANALYST)),
+        current_user: User = Depends(role_required(schemas.RoleEnum.BIO_ANALYST)),
         db: Session = Depends(get_db),
 ):
     test = db.query(LabTest).filter(LabTest.id == test_id).first()
@@ -104,3 +104,11 @@ async def get_lab_test_file(
         filename=test.original_filename,
         media_type=test.content_type,
     )
+
+@router.get("/tests", response_model=list[schemas.LabTest])
+async def get_lab_tests(
+        db: Session = Depends(get_db),
+        current_user: User = Depends(role_required(schemas.RoleEnum.BIO_ANALYST)),
+):
+    tests = db.query(LabTest).all()
+    return tests

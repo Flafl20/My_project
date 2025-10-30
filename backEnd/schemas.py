@@ -10,7 +10,7 @@ class RoleEnum(Enum):
     PATIENT = "PATIENT"
     DOCTOR = "DOCTOR"
     PHARMACIST = "PHARMACIST"
-    BI0_ANALYST = "BIO_ANALYST"
+    BIO_ANALYST = "BIO_ANALYST"
     ADMIN = "ADMIN"
 
 

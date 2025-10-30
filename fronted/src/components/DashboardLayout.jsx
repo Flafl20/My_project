@@ -16,7 +16,7 @@ const DashboardLayout = ({ children }) => {
   if (authRole === "PATIENT") baseDashboardPath = "/patient"
   else if (authRole === "DOCTOR") baseDashboardPath = "/doctor"
   else if (authRole === "PHARMACIST") baseDashboardPath = "/pharmacist"
-  else if (authRole === "BI0_ANALYST") baseDashboardPath = "/bio-analyst"
+  else if (authRole === "BIO_ANALYST") baseDashboardPath = "/bio-analyst"
 
   const isOnDashboardHome = location.pathname === baseDashboardPath
 
