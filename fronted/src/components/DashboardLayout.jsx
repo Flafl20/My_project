@@ -37,7 +37,7 @@ const DashboardLayout = ({ children }) => {
               </button>
             )}
             <div className="flex items-center">
-              <span className="text-2xl font-bold text-blue-600">
+              <span className="text-2xl font-bold text-green-600">
                 HealthApp
               </span>
               <span className="ml-4 text-lg font-medium text-gray-700">
