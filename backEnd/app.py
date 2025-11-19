@@ -18,7 +18,10 @@ app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-origins = ["http://localhost:3000", "http://localhost:8000"]
+origins = ["http://localhost:3000", "http://localhost:8000", "https://heathapp-zeta.vercel.app", "https://*.vercel.app"]
+app.add_middleware(
+    CORSMiddleware,
+)
 
 app.add_middleware(
     CORSMiddleware,
