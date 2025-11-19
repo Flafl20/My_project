@@ -136,7 +136,6 @@ class PrescriptionFill(Base):
     pharmacist = relationship("User", foreign_keys=[pharmacist_id])
 
 
-Base.metadata.create_all(bind=engine)
 
 class LabTest(Base):
     __tablename__ = "lab_tests"
@@ -156,3 +155,5 @@ class LabTest(Base):
 
     patient = relationship("Patient", back_populates="lab_tests")
     bio_analyst = relationship("User", foreign_keys=[bio_analyst_id])
+
+Base.metadata.create_all(bind=engine)

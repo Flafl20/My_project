@@ -64,6 +64,8 @@ async def create_lab_test(
             os.remove(file_path)
         raise HTTPException(status_code=500, detail=f"Failed to create lab test: {e}")
 
+    return db_lab_test
+
 @router.get("/patients/{patient_id}/tests", response_model=list[schemas.LabTest])
 async def get_lab_test_for_patients(
         patient_id: int ,

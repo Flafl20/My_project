@@ -164,7 +164,7 @@ async def get_prescription(
 
 @router.get("/patients", response_model=list[schemas.Patient])
 async def get_all_patients(
-    current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR)),
+    current_user: User = Depends(role_required(schemas.RoleEnum.DOCTOR, schemas.RoleEnum.BIO_ANALYST)),
     db: Session = Depends(get_db),
 ):
     patient_query = db.query(Patient).join(User, Patient.user_id == User.id).all()

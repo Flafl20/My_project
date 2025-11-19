@@ -106,6 +106,7 @@ class Patient(PatientBase):
     updated_at: datetime
     patient_name: str | None = None
     prescriptions: List["Prescription"] = []
+    lab_tests: List["LabTest"] = []
 
     class Config:
         from_attributes = True
